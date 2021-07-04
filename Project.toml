@@ -1,0 +1,4 @@
+name = "Tidal"
+uuid = "9add6278-0694-4d65-a020-83256179b1db"
+authors = ["David James <davidabraham@ucla.edu>"]
+version = "0.1.0"
