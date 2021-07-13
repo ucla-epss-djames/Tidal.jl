@@ -2,3 +2,6 @@ name = "Tidal"
 uuid = "9add6278-0694-4d65-a020-83256179b1db"
 authors = ["David James <davidabraham@ucla.edu>"]
 version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"

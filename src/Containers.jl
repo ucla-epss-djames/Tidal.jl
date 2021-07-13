@@ -20,7 +20,7 @@ function aggregate_matrix!(l::Integer, layers::Integer, data::Matrix{Comlpex}, B
     Yi1 = zeros(Complex, m, m)
     Yi = zeros(Complex, m, m)
 
-    for i in 2,layers
+    for i in 2, layers
 
         Bi1 = B
 
