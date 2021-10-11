@@ -7,14 +7,20 @@ using LinearAlgebra
 const m = 6
 const n = 3
 
-function aggregate_matrix!(l::Integer, layers::Integer, data::Matrix{Comlpex}, B::Matrix{Complex}, Bi::Matrix{Complex})
+function aggregate_matrix!(l::Integer, layers::Integer, data::Matrix{Comlpex},
+                           flag::Bool, B::Matrix{Complex}, Bi::Matrix{Complex})
 
     r = data[:,1]
     μ = data[:,2]
     a = data[:,3]
     ρ = data[:,4]
 
-    B = core_matrix(l, r[1], μ[1], a[1], ρ[1])
+    if flag
+        B = core_GD_matrix()
+    else
+        B = core_HH_matrix(l, r[1], μ[1], a[1], ρ[1])
+    end
+
     Bi[:,:,1] = B
 
     Yi1 = zeros(Complex, m, m)
@@ -36,8 +42,25 @@ function aggregate_matrix!(l::Integer, layers::Integer, data::Matrix{Comlpex}, B
 
 end
 
+function core_GD_matrix(l::Integer, r::Real, a::Real, ρ::Real)
 
-function core_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
+    B = zeros(Complex, m, n)
+
+    Ac = a / r
+
+    B[1,1] = -r^l / a
+    B[5,1] = r^l
+    B[6,1] = 2*(l - 1)*r^(l - 1)
+
+    B[2,2] = 1
+
+    B[1,3] = 1
+    B[3,3] = ρ * r * Ac
+    B[6,3] = 3 * Ac
+
+end
+
+function core_HH_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
 
     B = zeros(Complex, m, n)
 
@@ -67,13 +90,16 @@ function core_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
 
 end
 
-function propagator_matrix!(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real, Y::Matrix{Complex})
+function propagator_matrix!(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real,
+                            Y::Matrix{Complex})
 
     lp1 = l + 1
     lp2 = l + 2
     lp3 = l + 3
 
-    Y[1:m,1:n] = core_matrix(l, r, μ, a, ρ)
+    Y[:,:] = 0
+
+    Y[1:m,1:n] = core_HH_matrix(l, r, μ, a, ρ)
 
     Y[1,4] = lp1 * r^-l / (2(2l - 1))
     Y[2,4] = (2 - l)*r^-l / (2l * (2l - 1))

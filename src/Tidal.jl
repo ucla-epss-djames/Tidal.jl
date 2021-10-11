@@ -10,12 +10,13 @@ const G = 6.67408e-11
 
 # Functions to add here
 # propagator_method
-function propagtor_method(l::Integer, layers::Integer, data::Matrix{Complex})
+function propagtor_method(l::Integer, layers::Integer, data::Matrix{Complex},
+                          flag::Bool)
 
     B = zeros(Complex, m, n)
     Bi = zeros(Complex, m, n, layers)
 
-    aggregate_matrix!(l, layers, data, B, Bi)
+    aggregate_matrix!(l, layers, data, flag, B, Bi)
 
     bound = solve_vector()
 
@@ -62,6 +63,19 @@ function solve_layer(l::Integer, layers::Integer, data::Matrix{Complex}, c::Vect
     end
 
 end
+
+function use_GD_core(r::Real, μ::Real)
+
+    if r > 0.0 && μ == 0
+        flag = true
+    else
+        flag = false
+    end
+
+    return flag
+
+end
+
 
 # normalize
 function normalize!(mass::Real, r::Real, data::Matrix{Complex})
