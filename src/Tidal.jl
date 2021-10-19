@@ -4,28 +4,25 @@ include("Containers.jl")
 
 using .Containers
 
-export propagtor_method, normalize!
+using PhysicalConstants.CODATA2018: G
 
-const G = 6.67408e-11
+export propagator_method, normalize!
 
 # Functions to add here
 # propagator_method
-function propagtor_method(l::Integer, layers::Integer, data::Matrix{Complex},
+function propagator_method(l::Integer, layers::Integer, data::Matrix{Complex},
                           flag::Bool)
 
-    B = zeros(Complex, m, n)
-    Bi = zeros(Complex, m, n, layers)
+    B, Bi = aggregate_matrix(l, layers, data, flag)
 
-    aggregate_matrix!(l, layers, data, flag, B, Bi)
+    bound = solve_vector(l, real(data[end,1]), B)
 
-    bound = solve_vector()
-
-    tidal = solve_layer()
+    tidal = solve_layer(l, layers, data, bound, Bi)
 
 end
 
 # solve_vector
-function solve_vector(l::Integer, r::Real, B::Matrix{Complex})
+function solve_vector(l::Integer, r::Real, B::Matrix)
 
     b = zeros(Complex, n)
     b[3] = (-2l - 1) / r
@@ -43,14 +40,14 @@ function solve_vector(l::Integer, r::Real, B::Matrix{Complex})
 end
 
 # solve_layer
-function solve_layer(l::Integer, layers::Integer, data::Matrix{Complex}, c::Vector{Complex}, Bi::Array{Matrix})
+function solve_layer(l::Integer, layers::Integer, data::Matrix{Complex}, c::Vector, Bi::Array{Complex})
 
     r = data[:,1]
     a = data[:,3]
     y = zeros(Complex, m)
     tidal = zeros(Complex, layers, 3)
 
-    for i in 1, layers
+    for i in 1:layers
 
         y = Bi[:,:,i] * c
 
@@ -61,6 +58,8 @@ function solve_layer(l::Integer, layers::Integer, data::Matrix{Complex}, c::Vect
         tidal[i,:] = [kl, hl, ll]
 
     end
+
+    return tidal
 
 end
 
@@ -80,7 +79,7 @@ end
 # normalize
 function normalize!(mass::Real, r::Real, data::Matrix{Complex})
 
-    a = mass / r^2 * G
+    a = mass / r^2 * G.val
     ρ = mass / r^3
     p = ρ * a * r
 
