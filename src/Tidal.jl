@@ -15,7 +15,7 @@ function propagator_method(l::Integer, layers::Integer, data::Matrix{Complex},
 
     B, Bi = aggregate_matrix(l, layers, data, flag)
 
-    bound = solve_vector(l, real(data[end,1]), B)
+    bound = solve_vector(l, real(data[layers,1]), B)
 
     tidal = solve_layer(l, layers, data, bound, Bi)
 
