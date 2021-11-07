@@ -1,0 +1,49 @@
+#+TITLE: Tidal.jl
+#+AUTHOR: David James, davidabraham@ucla.edu
+
+* Description
+  This package calculates the tidal response in a planetary structure. Structure
+  functions can be pulled from ~Structure.jl~ or the user can design their own
+  structures to feed into ~Tidal.jl~.
+
+* Usage
+  The structure data being fed into ~Tidal.jl~ must follow the follow a specific
+  format to process correctly. It must be a 2-dim Complex Matrix with such that
+  the first row is initial radius and the bottom row is the final radius and
+  each column being:
+  - radius [m]
+  - gravity [m / s^2]
+  - shear modulus [Pa]
+  - density [kg / m^3]
+
+  The following lines are the simple calls to use ~Tidal.jl~
+  #+BEGIN_SRC julia
+    using Tidal
+    
+    # number of layers/rows your structure is
+    layers = 100
+    
+    # creating 4-col matrix
+    data = zeros(Complex, layers, 4)
+    
+    # ... inserting your data structure in matrix
+    
+    # determines which core matrix to use where
+    # ri is the first radial value in structure
+    # mu is real shear modulus in that same row
+    flag = use_GD_core(ri, mu)
+    
+    # normalize all values where
+    # mass is the total mass of the planet
+    # rf is the radius of the planet
+    # data is your structure 
+    normalize!(mass, rf, data)
+    
+    # calculating tidal response in planet where
+    # l is an integer describing the degree tidal number
+    tidal = propagator_method(l, layers, data, flag)
+    # tidal will consist of a Complex Matrix with
+    # each row corresponding to the row of the structure and
+    # each column is [kl, hl, ll] (Tidal Love Numbers)
+    
+  #+END_SRC
