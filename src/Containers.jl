@@ -1,14 +1,22 @@
-module Containers
-
-export m, n, aggregate_matrix
-
 using LinearAlgebra
 
 const m = 6
 const n = 3
 
-function aggregate_matrix(l::Integer, layers::Integer, data::Matrix{Complex},
-                          flag::Bool)
+"""
+    aggregate_matrix(l::Integer, layers::Integer,
+                     data::Matrix{Complex}, flag::Bool)
+
+Solves out the aggregate matrices given the harmonic degree `l`,
+number of rows in data `layers`, the `data` matrix, and core `flag`.
+The function outputs a 3D matrix where each row is the aggregate of
+the planet `layer` and the uppermost aggregate for other function
+calls.
+
+Refer to A5 of HH'14.
+"""
+function aggregate_matrix(l::Integer, layers::Integer,
+                          data::Matrix{Complex}, flag::Bool)
 
     B = zeros(Complex, m, n)
     Bi = zeros(Complex, m, n, layers)
@@ -47,6 +55,15 @@ function aggregate_matrix(l::Integer, layers::Integer, data::Matrix{Complex},
 
 end
 
+"""
+    core_GD_matrix(l::Integer, r::Real, a::Real, ρ::Real)
+
+Constructs Sabadini's "Global Dynamics" core matrix given the
+harmonic degree `l`, initial radial `r`, acceleration `a`, and
+density `ρ`.
+
+Refer to eq. 2.6 for construction of the core.
+"""
 function core_GD_matrix(l::Integer, r::Real, a::Real, ρ::Real)
 
     B = zeros(Complex, m, n)
@@ -67,6 +84,15 @@ function core_GD_matrix(l::Integer, r::Real, a::Real, ρ::Real)
 
 end
 
+"""
+    core_HH_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
+
+Constructs the HH'14 core matrix given the harmonic degree `l`,
+initial radial `r`, complex shear modulus `μ`, acceleration `a`, and
+density `ρ`.
+
+Refer to A3's first three columns for construction of the core.
+"""
 function core_HH_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
 
     B = zeros(Complex, m, n)
@@ -97,6 +123,16 @@ function core_HH_matrix(l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
 
 end
 
+"""
+    propagator_matrix!(Y::Matrix{Complex}, l::Integer, r::Real,
+                       μ::Complex, a::Real, ρ::Real)
+
+Constructs the propagator matrix given the previous propagator `Y`,
+harmonic degree `l`, radius `r`, complex shear modulus `μ`,
+acceleration `a`, and density `ρ`.
+
+Refer to A3 of HH'14.
+"""
 function propagator_matrix!(Y::Matrix{Complex}, l::Integer, r::Real,
                             μ::Complex, a::Real, ρ::Real)
 
@@ -127,7 +163,19 @@ function propagator_matrix!(Y::Matrix{Complex}, l::Integer, r::Real,
 
 end
 
-function inverse_matrix!(Y::Matrix, l::Integer, r::Real, μ::Complex, a::Real, ρ::Real)
+"""
+    inverse_matrix!(Y::Matrix, l::Integer, r::Real, μ::Complex,
+                    a::Real, ρ::Real)
+
+Constructs the inverse matrix given the previous matrix `Y`,
+harmonic degree `l`, radius `r`, complex shear modulus `μ`,
+acceleration `a`, and density `ρ`.
+
+Refer to A1-A5 of Spada et al. '92 and corrections in appendix of
+Vermeersen et al. '96
+"""
+function inverse_matrix!(Y::Matrix, l::Integer, r::Real, μ::Complex,
+                         a::Real, ρ::Real)
 
 
     lp1 = l + 1
@@ -186,4 +234,4 @@ function inverse_matrix!(Y::Matrix, l::Integer, r::Real, μ::Complex, a::Real, �
 
 end
 
-end # module
+export m, n, aggregate_matrix
