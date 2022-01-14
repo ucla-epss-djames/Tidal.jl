@@ -6,6 +6,27 @@
   functions can be pulled from ~Structure.jl~ or the user can design their own
   structures to feed into ~Tidal.jl~.
 
+* Citing
+  The method comes from the appendix of the following paper. Further citations
+  are provided in the comments of the code.
+
+  #+BEGIN_SRC bibtex
+    @article{Henning_2014,
+      doi = {10.1088/0004-637x/789/1/30},
+      url = {https://doi.org/10.1088/0004-637x/789/1/30},
+      year = 2014,
+      month = {jun},
+      publisher = {American Astronomical Society},
+      volume = {789},
+      number = {1},
+      pages = {30},
+      author = {Wade G. Henning and Terry Hurford},
+      title = {{TIDAL} {HEATING} {IN} {MULTILAYERED} {TERRESTRIAL} {EXOPLANETS}},
+      journal = {The Astrophysical Journal},
+      abstract = {The internal pattern and overall magnitude of tidal heating for spin-synchronous terrestrial exoplanets from 1 to 2.5 RE is investigated using a propagator matrix method for a variety of layer structures. Particular attention is paid to ice–silicate hybrid super-Earths, where a significant ice mantle is modeled to rest atop an iron-silicate core, and may or may not contain a liquid water ocean. We find multilayer modeling often increases tidal dissipation relative to a homogeneous model, across multiple orbital periods, due to the ability to include smaller volume low viscosity regions, and the added flexure allowed by liquid layers. Gradations in parameters with depth are explored, such as allowed by the Preliminary Earth Reference Model. For ice–silicate hybrid worlds, dramatically greater dissipation is possible beyond the case of a silicate mantle only, allowing non-negligible tidal activity to extend to greater orbital periods than previously predicted. Surface patterns of tidal heating are found to potentially be useful for distinguishing internal structure. The influence of ice mantle depth and water ocean size and position are shown for a range of forcing frequencies. Rates of orbital circularization are found to be 10–100 times faster than standard predictions for Earth-analog planets when interiors are moderately warmer than the modern Earth, as well as for a diverse range of ice–silicate hybrid super-Earths. Circularization rates are shown to be significantly longer for planets with layers equivalent to an ocean-free modern Earth, as well as for planets with high fractions of either ice or silicate melting.}
+    }
+  #+END_SRC
+
 * Usage
   The structure data being fed into ~Tidal.jl~ must follow the follow a specific
   format to process correctly. It must be a 2-dim Complex Matrix with such that
