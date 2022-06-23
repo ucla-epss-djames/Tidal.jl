@@ -8,7 +8,7 @@ module Tidal
 
 include("containers.jl")
 
-using PhysicalConstants.CODATA2018: G
+using PhysicalConstants.CODATA2014: G
 
 export propagator_method, normalize!
 
